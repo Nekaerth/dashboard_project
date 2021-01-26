@@ -47,9 +47,9 @@ export default {
 
 <style lang="scss" scoped>
 .Tile {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   max-width: 240px;
   max-height: 240px;
   border-radius: 6px;
@@ -64,7 +64,7 @@ export default {
 }
 
 .Tile__content {
-	text-align: center;
-	padding: 2em;
+  text-align: center;
+  padding: 2em;
 }
 </style>

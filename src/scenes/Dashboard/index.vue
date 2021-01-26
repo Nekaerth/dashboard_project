@@ -1,10 +1,12 @@
 <template>
-  <div>
+  <div style="text-align: center">
     <br />
     <br />
-    <Tooltip :active="true" label="Se mere" position="right">
-      <v-btn @click="someAction">Click here...</v-btn>
+    <Tooltip :active="true" label="This is a button aaaaaaaaaa">
+      <button @click="someAction">Click here...</button>
     </Tooltip>
+    <br />
+    <br />
     <Tiles :items="tiles" />
   </div>
 </template>
