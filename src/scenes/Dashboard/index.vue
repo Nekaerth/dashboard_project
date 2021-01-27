@@ -2,7 +2,7 @@
   <div style="text-align: center">
     <br />
     <br />
-    <Tooltip :active="true" label="This is a button aaaaaaaaaa">
+    <Tooltip :active="true" label="This is a button">
       <button @click="someAction">Click here...</button>
     </Tooltip>
     <br />

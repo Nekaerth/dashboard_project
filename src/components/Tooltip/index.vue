@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="active" :class="getClass">
+    <div v-if="active" :class="'Tooltip__content Tooltip__' + position">
       <span class="Tooltip__text">{{ label }}</span>
       <slot name="default" />
     </div>
@@ -22,18 +22,13 @@ export default {
     },
     position: {
       type: String,
-      default: "right", //top, bottom, left, right
-    },
-  },
-  computed: {
-    getClass() {
-      return "Tooltip__content Tooltip__" + this.position;
+      default: "top", //top, bottom, left, right
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .Tooltip__content {
   position: relative;
   display: inline-block;
@@ -49,36 +44,38 @@ export default {
   text-align: center;
   border-radius: 6px;
   padding: 0.3rem;
-
-  /* Position the tooltip */
   position: absolute;
   z-index: 1;
-}
-.Tooltip__content.Tooltip__top .Tooltip__text {
-  width: 120px;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -60px;
-}
-
-.Tooltip__content.Tooltip__bottom .Tooltip__text {
-  width: 120px;
-  top: 100%;
-  left: 50%;
-  margin-left: -60px;
-}
-
-.Tooltip__content.Tooltip__right .Tooltip__text {
-  top: -5px;
-  left: 105%;
-}
-
-.Tooltip__content.Tooltip__left .Tooltip__text {
-  top: -5px;
-  right: 105%;
+  opacity: 0;
+  transition: opacity 1s;
 }
 
 .Tooltip__content:hover .Tooltip__text {
   visibility: visible;
+  opacity: 1;
+}
+
+.Tooltip__content.Tooltip__top .Tooltip__text {
+  top: 0%;
+  left: 50%;
+  transform: translateY(-100%) translateX(-50%);
+}
+
+.Tooltip__content.Tooltip__bottom .Tooltip__text {
+  bottom: 0%;
+  left: 50%;
+  transform: translateY(100%) translateX(-50%);
+}
+
+.Tooltip__content.Tooltip__right .Tooltip__text {
+  top: 50%;
+  right: 0%;
+  transform: translateY(-50%) translateX(100%);
+}
+
+.Tooltip__content.Tooltip__left .Tooltip__text {
+  top: 50%;
+  left: 0%;
+  transform: translateY(-50%) translateX(-100%);
 }
 </style>
