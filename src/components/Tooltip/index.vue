@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="active" :class="'Tooltip__content Tooltip__' + position">
+    <div v-if="active" :class="['Tooltip', 'Tooltip--' + position]">
       <span class="Tooltip__text">{{ label }}</span>
       <slot name="default" />
     </div>
@@ -28,54 +28,54 @@ export default {
 };
 </script>
 
-<style scoped>
-.Tooltip__content {
+<style lang="scss" scoped>
+.Tooltip {
   position: relative;
   display: inline-block;
-}
 
-.Tooltip__content .Tooltip__text {
-  font-family: Verdana, sans-serif;
-  font-size: 12px;
-  visibility: hidden;
-  width: max-content;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 0.3rem;
-  position: absolute;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 1s;
-}
+  .Tooltip__text {
+    font-family: Verdana, sans-serif;
+    font-size: 12px;
+    visibility: hidden;
+    width: max-content;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 0.3rem;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 1s;
+  }
 
-.Tooltip__content:hover .Tooltip__text {
-  visibility: visible;
-  opacity: 1;
-}
+  &.Tooltip--top .Tooltip__text {
+    top: 0%;
+    left: 50%;
+    transform: translateY(-100%) translateX(-50%);
+  }
 
-.Tooltip__content.Tooltip__top .Tooltip__text {
-  top: 0%;
-  left: 50%;
-  transform: translateY(-100%) translateX(-50%);
-}
+  &.Tooltip--bottom .Tooltip__text {
+    bottom: 0%;
+    left: 50%;
+    transform: translateY(100%) translateX(-50%);
+  }
 
-.Tooltip__content.Tooltip__bottom .Tooltip__text {
-  bottom: 0%;
-  left: 50%;
-  transform: translateY(100%) translateX(-50%);
-}
+  &.Tooltip--right .Tooltip__text {
+    top: 50%;
+    right: 0%;
+    transform: translateY(-50%) translateX(100%);
+  }
 
-.Tooltip__content.Tooltip__right .Tooltip__text {
-  top: 50%;
-  right: 0%;
-  transform: translateY(-50%) translateX(100%);
-}
+  &.Tooltip--left .Tooltip__text {
+    top: 50%;
+    left: 0%;
+    transform: translateY(-50%) translateX(-100%);
+  }
 
-.Tooltip__content.Tooltip__left .Tooltip__text {
-  top: 50%;
-  left: 0%;
-  transform: translateY(-50%) translateX(-100%);
+  &:hover .Tooltip__text {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 </style>

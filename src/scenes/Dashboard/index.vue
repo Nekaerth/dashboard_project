@@ -7,6 +7,16 @@
     </Tooltip>
     <br />
     <br />
+    <TooltipExtended title="title" :timer="1000">
+      <template #content>
+        <h1>Indhold</h1>
+      </template>
+      <template #default="{ show }">
+        <button @click="show">Click here...</button>
+      </template>
+    </TooltipExtended>
+    <br />
+    <br />
     <Tiles :items="tiles" />
   </div>
 </template>
@@ -14,12 +24,14 @@
 <script>
 import Tiles from "./components/Tiles";
 import Tooltip from "../../components/Tooltip";
+import TooltipExtended from "../../components/TooltipExtended";
 
 export default {
   name: "Dashboard",
   components: {
     Tiles,
     Tooltip,
+    TooltipExtended,
   },
   computed: {
     tiles() {
