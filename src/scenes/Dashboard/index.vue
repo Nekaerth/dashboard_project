@@ -1,23 +1,33 @@
 <template>
-  <div style="text-align: center">
-    <br />
-    <br />
-    <Tooltip :active="true" label="This is a button">
-      <button @click="someAction">Click here...</button>
-    </Tooltip>
-    <br />
-    <br />
-    <TooltipExtended title="title" :timer="1000">
-      <template #content>
-        <h1>Indhold</h1>
-      </template>
-      <template #default="{ show }">
-        <button @click="show">Click here...</button>
-      </template>
-    </TooltipExtended>
-    <br />
-    <br />
+  <div>
+    <div style="text-align: center">
+      <br />
+      <Tooltip :active="true" label="This is a button">
+        <button @click="someAction">Click here...</button>
+      </Tooltip>
+      <br />
+      <TooltipExtended title="title">
+        <template #content>
+          <h1 >Indhold</h1>
+        </template>
+        <template #default="{ show }">
+          <button @click="show">Click here...</button>
+        </template>
+      </TooltipExtended>
+      <br />
+    </div>
     <Tiles :items="tiles" />
+    <br />
+    <div style="text-align: left">
+      <TooltipExtended title="title" positioning="horizontal">
+        <template #content>
+          <h1>Indhold</h1>
+        </template>
+        <template #default="{ show }">
+          <button @click="show">Click here...</button>
+        </template>
+      </TooltipExtended>
+    </div>
   </div>
 </template>
 
