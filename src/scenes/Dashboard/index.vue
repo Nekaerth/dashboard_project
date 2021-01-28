@@ -1,47 +1,16 @@
 <template>
   <div>
-    <div style="text-align: center">
-      <br />
-      <Tooltip :active="true" label="This is a button">
-        <button @click="someAction">Click here...</button>
-      </Tooltip>
-      <br />
-      <TooltipExtended title="title">
-        <template #content>
-          <h1 >Indhold</h1>
-        </template>
-        <template #default="{ show }">
-          <button @click="show">Click here...</button>
-        </template>
-      </TooltipExtended>
-      <br />
-    </div>
     <Tiles :items="tiles" />
-    <br />
-    <div style="text-align: left">
-      <TooltipExtended title="title" positioning="horizontal">
-        <template #content>
-          <h1>Indhold</h1>
-        </template>
-        <template #default="{ show }">
-          <button @click="show">Click here...</button>
-        </template>
-      </TooltipExtended>
-    </div>
   </div>
 </template>
 
 <script>
 import Tiles from "./components/Tiles";
-import Tooltip from "../../components/Tooltip";
-import TooltipExtended from "../../components/TooltipExtended";
 
 export default {
   name: "Dashboard",
   components: {
     Tiles,
-    Tooltip,
-    TooltipExtended,
   },
   computed: {
     tiles() {
