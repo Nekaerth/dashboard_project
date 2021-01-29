@@ -1,13 +1,14 @@
 <template>
   <div>
     <Tiles :items="tiles" />
+    <br />
     <Schedule :items="events" />
   </div>
 </template>
 
 <script>
 import Tiles from "./components/Tiles";
-import Tiles from "./components/Schedule";
+import Schedule from "./components/Schedule";
 
 export default {
   name: "Dashboard",

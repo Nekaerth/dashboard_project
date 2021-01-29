@@ -1,32 +1,13 @@
 <template>
-  <div id="app" class="Buttons">
-    <TooltipExtended
-      v-for="(item, index) in items"
-      class="Button"
-      :key="index"
-      title="What inspires you?"
-      :positioning="item"
-      :timer="-1"
-      :maxwidth="400"
-      ><template #image>
-        <i class="fas fa-ambulance" style="font-size: 40px;"></i>
-      </template>
-      ><template #content>
-        <span>Tell us your interests and we'll pick the best articles just for you.</span>
-      </template>
-      ><template #footer>
-        <button style="background-color: rgb(12, 82, 156); color: white; border-width: 0px">Learn more</button>
-      </template>
-      <template #default="{ show }">
-        <button @click="show">{{ item }}</button>
-      </template>
-    </TooltipExtended>
+  <div id="app">
+    <Dashboard />
   </div>
 </template>
+
 <script>
-//import Dashboard from "./scenes/Dashboard";
-//import Tooltip from "../components/Tooltip";
-import TooltipExtended from "./components/TooltipExtended";
+import Dashboard from "./scenes/Dashboard";
+//import Tooltip from "./components/Tooltip";
+//import TooltipExtended from "./components/TooltipExtended";
 
 /*
 <Tooltip label="This is a button">
@@ -34,10 +15,43 @@ import TooltipExtended from "./components/TooltipExtended";
 </Tooltip>
 */
 
+/*
+<div class="Buttons">
+  <TooltipExtended
+    v-for="(item, index) in items"
+    class="Button"
+    :key="index"
+    title="What inspires you?"
+    :positioning="item"
+    :timer="-1"
+    :maxwidth="250"
+    ><template #image>
+      <i class="fas fa-ambulance" style="font-size: 40px;"></i>
+    </template>
+    ><template #content>
+      <span
+        >Tell us your interests and we'll pick the best articles just for
+        you.</span
+      >
+    </template>
+    ><template #footer>
+      <button
+        style="background-color: rgb(12, 82, 156); color: white; border-width: 0px"
+      >
+        Learn more
+      </button>
+    </template>
+    <template #default="{ show }">
+      <button @click="show">{{ item }}</button>
+    </template>
+  </TooltipExtended>
+</div>
+*/
+
 export default {
   name: "App",
   components: {
-    TooltipExtended,
+    Dashboard,
   },
   data() {
     return {

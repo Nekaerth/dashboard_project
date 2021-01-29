@@ -1,6 +1,5 @@
 <template>
   <div class="Event">
-    <div class="Event__line">line</div>
     <div class="Event__content">
       <div class="Event__title">{{ title }}</div>
       <div class="Event__description">{{ description }}</div>
@@ -14,7 +13,7 @@ export default {
   name: "Event",
   props: {
     title: {
-      type: Array,
+      type: String,
       required: true,
     },
     description: {
@@ -36,8 +35,34 @@ export default {
 <style lang="scss" scoped>
 .Event {
   display: flex;
+  font-family: "Roboto", sans-serif;
+  background-color: red;
+  max-width: 300px;
 
   .Event__line {
+    background-color: purple;
+    width: 3px;
+  }
+
+  .Event__content {
+    background-color: cyan;
+    margin: 5px, 0px, 10px, 5px;
+  }
+
+  .Event__title {
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+  }
+
+  .Event__description {
+    font-size: 12px;
+    color: gray;
+  }
+
+  .Event__date {
+    font-size: 12px;
+    color: gray;
   }
 }
 </style>
