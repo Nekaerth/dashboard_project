@@ -1,5 +1,6 @@
 <template>
   <div :class="['Tooltip', 'Tooltip--' + position]" ref="element">
+    <div v-if="active" class="Tooltip__arrow" />
     <div v-if="active" class="Tooltip__content" ref="tooltip">
       <i @click="close" class="Tooltip__button fad fa-times-square"></i>
       <slot name="content" :close="close" />
@@ -140,90 +141,184 @@ export default {
   position: relative;
   display: inline-block;
 
+  --tooltip-color: rgb(140, 154, 235);
+  --arrow-size: 7px;
+  --translate-backward: calc(-100% - var(--arrow-size) + 1px);
+  --translate-forward: calc(100% + var(--arrow-size) - 1px);
   .Tooltip__content {
     width: max-content;
-    background-color: rgb(140, 154, 235);
-    border-radius: 4px;
+    background-color: var(--tooltip-color);
+    border-radius: 3px;
     padding: 0.3rem;
     position: absolute;
     z-index: 1;
   }
 
+  .Tooltip__arrow {
+    content: "";
+    border: var(--arrow-size) solid transparent;
+    position: absolute;
+    z-index: 1;
+  }
+
   //Normal cases
-  &.Tooltip--top .Tooltip__content {
-    top: 0%;
-    left: 50%;
-    transform: translateY(-100%) translateX(-50%);
+  &.Tooltip--top {
+    .Tooltip__content {
+      top: 0%;
+      left: 50%;
+      transform: translateY(var(--translate-backward)) translateX(-50%);
+    }
+    .Tooltip__arrow {
+      border-top-color: var(--tooltip-color);
+      top: 0%;
+      transform: translateY(-50%);
+    }
   }
-  &.Tooltip--bottom .Tooltip__content {
-    bottom: 0%;
-    left: 50%;
-    transform: translateY(100%) translateX(-50%);
+  &.Tooltip--bottom {
+    .Tooltip__content {
+      bottom: 0%;
+      left: 50%;
+      transform: translateY(var(--translate-forward)) translateX(-50%);
+    }
+    .Tooltip__arrow {
+      border-bottom-color: var(--tooltip-color);
+      bottom: 0%;
+      transform: translateY(50%);
+    }
   }
-  &.Tooltip--right .Tooltip__content {
-    top: 50%;
-    right: 0%;
-    transform: translateY(-50%) translateX(100%);
+  &.Tooltip--right {
+    .Tooltip__content {
+      top: 50%;
+      right: 0%;
+      transform: translateY(-50%) translateX(var(--translate-forward));
+    }
+    .Tooltip__arrow {
+      border-right-color: var(--tooltip-color);
+      right: 0%;
+      transform: translateX(50%);
+    }
   }
-  &.Tooltip--left .Tooltip__content {
-    top: 50%;
-    left: 0%;
-    transform: translateY(-50%) translateX(-100%);
+  &.Tooltip--left {
+    .Tooltip__content {
+      top: 50%;
+      left: 0%;
+      transform: translateY(-50%) translateX(var(--translate-backward));
+    }
+    .Tooltip__arrow {
+      border-left-color: var(--tooltip-color);
+      left: 0%;
+      transform: translateX(-50%);
+    }
   }
 
   //Top-left cases
-  &.Tooltip--topleft .Tooltip__content {
-    bottom: 0%;
-    left: 0%;
-    transform: translateX(-100%);
+  &.Tooltip--topleft {
+    .Tooltip__content {
+      bottom: 0%;
+      left: 0%;
+      transform: translateX(var(--translate-backward));
+    }
+    .Tooltip__arrow {
+      border-left-color: var(--tooltip-color);
+      left: 0%;
+      transform: translateX(-50%);
+    }
   }
-  &.Tooltip--topleft2 .Tooltip__content {
-    top: 0%;
-    right: 0%;
-    transform: translateY(-100%);
+  &.Tooltip--topleft2 {
+    .Tooltip__content {
+      top: 0%;
+      right: 0%;
+      transform: translateY(var(--translate-backward));
+    }
+    .Tooltip__arrow {
+      border-top-color: var(--tooltip-color);
+      top: 0%;
+      transform: translateY(-50%);
+    }
   }
 
   //Top-right cases
-  &.Tooltip--topright .Tooltip__content {
-    bottom: 0%;
-    right: 0%;
-    transform: translateX(100%);
+  &.Tooltip--topright {
+    .Tooltip__content {
+      bottom: 0%;
+      right: 0%;
+      transform: translateX(var(--translate-forward));
+    }
+    .Tooltip__arrow {
+      border-right-color: var(--tooltip-color);
+      right: 0%;
+      transform: translateX(50%);
+    }
   }
-  &.Tooltip--topright2 .Tooltip__content {
-    top: 0%;
-    left: 0%;
-    transform: translateY(-100%);
+  &.Tooltip--topright2 {
+    .Tooltip__content {
+      top: 0%;
+      left: 0%;
+      transform: translateY(var(--translate-backward));
+    }
+    .Tooltip__arrow {
+      border-top-color: var(--tooltip-color);
+      top: 0%;
+      transform: translateY(-50%);
+    }
   }
 
   //Bottom-left cases
-  &.Tooltip--bottomleft .Tooltip__content {
-    top: 0%;
-    left: 0%;
-    transform: translateX(-100%);
+  &.Tooltip--bottomleft {
+    .Tooltip__content {
+      top: 0%;
+      left: 0%;
+      transform: translateX(var(--translate-backward));
+    }
+    .Tooltip__arrow {
+      border-left-color: var(--tooltip-color);
+      left: 0%;
+      transform: translateX(-50%);
+    }
   }
-  &.Tooltip--bottomleft2 .Tooltip__content {
-    bottom: 0%;
-    right: 0%;
-    transform: translateY(100%);
+  &.Tooltip--bottomleft2 {
+    .Tooltip__content {
+      bottom: 0%;
+      right: 0%;
+      transform: translateY(var(--translate-forward));
+    }
+    .Tooltip__arrow {
+      border-bottom-color: var(--tooltip-color);
+      bottom: 0%;
+      transform: translateY(50%);
+    }
   }
 
   //Bottom-right cases
-  &.Tooltip--bottomright .Tooltip__content {
-    top: 0%;
-    right: 0%;
-    transform: translateX(100%);
+  &.Tooltip--bottomright {
+    .Tooltip__content {
+      top: 0%;
+      right: 0%;
+      transform: translateX(var(--translate-forward));
+    }
+    .Tooltip__arrow {
+      border-right-color: var(--tooltip-color);
+      right: 0%;
+      transform: translateX(50%);
+    }
   }
-  &.Tooltip--bottomright2 .Tooltip__content {
-    bottom: 0%;
-    left: 0%;
-    transform: translateY(100%);
+  &.Tooltip--bottomright2 {
+    .Tooltip__content {
+      bottom: 0%;
+      left: 0%;
+      transform: translateY(var(--translate-forward));
+    }
+    .Tooltip__arrow {
+      border-bottom-color: var(--tooltip-color);
+      bottom: 0%;
+      transform: translateY(50%);
+    }
   }
 
   .Tooltip__button {
     position: absolute;
     top: 3px;
     right: 3px;
-    transform: translateY(0%) translateX(0%);
   }
 }
 </style>
