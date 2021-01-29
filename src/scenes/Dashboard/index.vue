@@ -1,16 +1,19 @@
 <template>
   <div>
     <Tiles :items="tiles" />
+    <Schedule :items="events" />
   </div>
 </template>
 
 <script>
 import Tiles from "./components/Tiles";
+import Tiles from "./components/Schedule";
 
 export default {
   name: "Dashboard",
   components: {
     Tiles,
+    Schedule,
   },
   computed: {
     tiles() {
@@ -79,6 +82,34 @@ export default {
           title: "Favoritter",
           amount: 11,
           icon: "fal fa-heart",
+          action: this.someAction,
+        },
+      ];
+    },
+    events() {
+      return [
+        {
+          title: "Wedding photoshoot",
+          description: "30 guests, vintage style",
+          date: "2021-12-26T09:20:00",
+          action: this.someAction,
+        },
+        {
+          title: "Retouch",
+          description: "Can be rescheduled",
+          date: "2021-12-26T12:00:00",
+          action: this.someAction,
+        },
+        {
+          title: "Portrait photography",
+          description: "Business center",
+          date: "2021-12-27T15:00:00",
+          action: this.someAction,
+        },
+        {
+          title: "Personal photoshoot",
+          description: "Guidance required",
+          date: "2021-12-27T18:20:00",
           action: this.someAction,
         },
       ];

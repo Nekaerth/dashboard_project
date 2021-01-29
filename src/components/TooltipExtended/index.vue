@@ -1,29 +1,55 @@
 <template>
   <div :class="['Tooltip', 'Tooltip--' + position]" ref="element">
     <div v-if="active" class="Tooltip__arrow" />
-    <div v-if="active" class="Tooltip__content" ref="tooltip">
-      <i @click="close" class="Tooltip__button fad fa-times-square"></i>
-      <slot name="content" :close="close" />
+    <div
+      v-if="active"
+      class="Tooltip__content"
+      ref="tooltip"
+      :style="'max-width: ' + maxwidth + 'px'"
+    >
+      <Close @click="close" size="small" class="Tooltip__button" />
+      <div class="Tooltip__topcontent">
+        <div :class="hasImageSlot && 'Tooltip__image'">
+          <slot name="image" />
+        </div>
+        <div class="Tooltip__rightcontent">
+          <span class="Tooltip__title">{{ title }}</span>
+          <div class="Tooltip__body">
+            <slot name="content" />
+          </div>
+        </div>
+      </div>
+      <div :class="hasFooterSlot && 'Tooltip__footer'">
+        <slot name="footer" :close="close" />
+      </div>
     </div>
     <slot name="default" :show="show" />
   </div>
 </template>
 
 <script>
+import Close from "../Close";
 export default {
   name: "TooltipExtended",
+  components: {
+    Close,
+  },
   props: {
     title: {
       type: String,
       default: "",
     },
+    positioning: {
+      type: String,
+      default: "vertical", //vertical, horizontal
+    },
     timer: {
       type: Number,
       default: -1,
     },
-    positioning: {
-      type: String,
-      default: "vertical", //vertical, horizontal
+    maxwidth: {
+      type: Number,
+      default: 300, //pixels
     },
   },
   data() {
@@ -33,6 +59,14 @@ export default {
       position: "top", //top, bottom, left. right, topleft, topright, bottomleft, bottomright
       ready: false,
     };
+  },
+  computed: {
+    hasImageSlot() {
+      return !!this.$slots.image;
+    },
+    hasFooterSlot() {
+      return !!this.$slots.footer;
+    },
   },
   methods: {
     show() {
@@ -54,12 +88,8 @@ export default {
       var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
 
-      //Corner case
-      var res = this.isInCorner(rect, rectTooltip, windowWidth, windowHeight);
-      if (res) return res;
-
       //Edge case
-      res = this.isAtEdge(rect, rectTooltip, windowWidth, windowHeight);
+      var res = this.isAtEdge(rect, rectTooltip, windowWidth, windowHeight);
       if (res) return res;
 
       //Normal case
@@ -90,7 +120,7 @@ export default {
     isLeftWindow(rect, windowWidth) {
       return rect.centerX < windowWidth / 2;
     },
-    isInCorner(rect, rectTooltip, windowWidth, windowHeight) {
+    isAtEdge(rect, rectTooltip, windowWidth, windowHeight) {
       var isLeftWindow = this.isLeftWindow(rect, windowWidth);
       var isTopWindow = this.isTopWindow(rect, windowHeight);
       var isAtLeft = rect.centerX - rectTooltip.width / 2 < 0;
@@ -98,7 +128,7 @@ export default {
       var isAtTop = rect.centerY - rectTooltip.height / 2 < 0;
       var isAtBottom = rect.centerY + rectTooltip.height / 2 > windowHeight;
 
-      //vertical
+      //Vertical
       if (this.positioning == "vertical") {
         if (isAtLeft && isTopWindow) return "bottomright2";
         if (isAtLeft && !isTopWindow) return "topright2";
@@ -112,9 +142,6 @@ export default {
         if (isAtBottom && isLeftWindow) return "topright";
         if (isAtBottom && !isLeftWindow) return "topleft";
       }
-      return "";
-    },
-    isAtEdge() {
       return "";
     },
   },
@@ -141,15 +168,19 @@ export default {
   position: relative;
   display: inline-block;
 
-  --tooltip-color: rgb(140, 154, 235);
+  --color: white;
+  --text-color: rgb(16, 24, 45);
+  --font: "Roboto", sans-serif;
   --arrow-size: 7px;
   --translate-backward: calc(-100% - var(--arrow-size) + 1px);
   --translate-forward: calc(100% + var(--arrow-size) - 1px);
+
   .Tooltip__content {
     width: max-content;
-    background-color: var(--tooltip-color);
+    min-height: 50px;
+    background-color: var(--color);
+    box-shadow: 0 0px 20px rgba(0, 0, 0, 0.2);
     border-radius: 3px;
-    padding: 0.3rem;
     position: absolute;
     z-index: 1;
   }
@@ -158,10 +189,50 @@ export default {
     content: "";
     border: var(--arrow-size) solid transparent;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
   }
 
-  //Normal cases
+  .Tooltip__button {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+  }
+
+  .Tooltip__topcontent {
+    display: flex;
+    margin: 10px;
+  }
+
+  .Tooltip__image {
+    margin: auto;
+    padding-right: 10px;
+  }
+
+  .Tooltip__rightcontent {
+    font-family: var(--font);
+    color: var(--text-color);
+  }
+
+  .Tooltip__title {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    padding-bottom: 10px;
+  }
+
+  .Tooltip__body {
+    font-size: 12px;
+  }
+
+  .Tooltip__footer {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font);
+    color: var(--text-color);
+    padding: 0px 10px 10px 10px;
+  }
+
+  //Top
   &.Tooltip--top {
     .Tooltip__content {
       top: 0%;
@@ -169,11 +240,12 @@ export default {
       transform: translateY(var(--translate-backward)) translateX(-50%);
     }
     .Tooltip__arrow {
-      border-top-color: var(--tooltip-color);
+      border-top-color: var(--color);
       top: 0%;
       transform: translateY(-50%);
     }
   }
+  //Bottom
   &.Tooltip--bottom {
     .Tooltip__content {
       bottom: 0%;
@@ -181,11 +253,12 @@ export default {
       transform: translateY(var(--translate-forward)) translateX(-50%);
     }
     .Tooltip__arrow {
-      border-bottom-color: var(--tooltip-color);
+      border-bottom-color: var(--color);
       bottom: 0%;
       transform: translateY(50%);
     }
   }
+  //Right
   &.Tooltip--right {
     .Tooltip__content {
       top: 50%;
@@ -193,11 +266,12 @@ export default {
       transform: translateY(-50%) translateX(var(--translate-forward));
     }
     .Tooltip__arrow {
-      border-right-color: var(--tooltip-color);
+      border-right-color: var(--color);
       right: 0%;
       transform: translateX(50%);
     }
   }
+  //Left
   &.Tooltip--left {
     .Tooltip__content {
       top: 50%;
@@ -205,7 +279,7 @@ export default {
       transform: translateY(-50%) translateX(var(--translate-backward));
     }
     .Tooltip__arrow {
-      border-left-color: var(--tooltip-color);
+      border-left-color: var(--color);
       left: 0%;
       transform: translateX(-50%);
     }
@@ -219,7 +293,7 @@ export default {
       transform: translateX(var(--translate-backward));
     }
     .Tooltip__arrow {
-      border-left-color: var(--tooltip-color);
+      border-left-color: var(--color);
       left: 0%;
       transform: translateX(-50%);
     }
@@ -231,7 +305,7 @@ export default {
       transform: translateY(var(--translate-backward));
     }
     .Tooltip__arrow {
-      border-top-color: var(--tooltip-color);
+      border-top-color: var(--color);
       top: 0%;
       transform: translateY(-50%);
     }
@@ -245,7 +319,7 @@ export default {
       transform: translateX(var(--translate-forward));
     }
     .Tooltip__arrow {
-      border-right-color: var(--tooltip-color);
+      border-right-color: var(--color);
       right: 0%;
       transform: translateX(50%);
     }
@@ -257,7 +331,7 @@ export default {
       transform: translateY(var(--translate-backward));
     }
     .Tooltip__arrow {
-      border-top-color: var(--tooltip-color);
+      border-top-color: var(--color);
       top: 0%;
       transform: translateY(-50%);
     }
@@ -271,7 +345,7 @@ export default {
       transform: translateX(var(--translate-backward));
     }
     .Tooltip__arrow {
-      border-left-color: var(--tooltip-color);
+      border-left-color: var(--color);
       left: 0%;
       transform: translateX(-50%);
     }
@@ -283,7 +357,7 @@ export default {
       transform: translateY(var(--translate-forward));
     }
     .Tooltip__arrow {
-      border-bottom-color: var(--tooltip-color);
+      border-bottom-color: var(--color);
       bottom: 0%;
       transform: translateY(50%);
     }
@@ -297,7 +371,7 @@ export default {
       transform: translateX(var(--translate-forward));
     }
     .Tooltip__arrow {
-      border-right-color: var(--tooltip-color);
+      border-right-color: var(--color);
       right: 0%;
       transform: translateX(50%);
     }
@@ -309,16 +383,10 @@ export default {
       transform: translateY(var(--translate-forward));
     }
     .Tooltip__arrow {
-      border-bottom-color: var(--tooltip-color);
+      border-bottom-color: var(--color);
       bottom: 0%;
       transform: translateY(50%);
     }
-  }
-
-  .Tooltip__button {
-    position: absolute;
-    top: 3px;
-    right: 3px;
   }
 }
 </style>
