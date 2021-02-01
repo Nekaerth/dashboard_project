@@ -1,15 +1,17 @@
 <template>
-  <div :class="['Tooltip', 'Tooltip--' + position]" ref="element">
+  <div
+    :class="[
+      'Tooltip',
+      'Tooltip--' + position,
+      size ? 'Tooltip--' + size : undefined,
+    ]"
+    ref="element"
+  >
     <div v-if="active" class="Tooltip__arrow" />
-    <div
-      v-if="active"
-      class="Tooltip__content"
-      ref="tooltip"
-      :style="'max-width: ' + maxwidth + 'px'"
-    >
+    <div v-if="active" class="Tooltip__content" ref="tooltip">
       <Close @click="close" size="small" class="Tooltip__button" />
       <div class="Tooltip__topcontent">
-        <div :class="hasImageSlot && 'Tooltip__image'">
+        <div v-if="hasImageSlot" class="Tooltip__image">
           <slot name="image" />
         </div>
         <div class="Tooltip__rightcontent">
@@ -19,7 +21,7 @@
           </div>
         </div>
       </div>
-      <div :class="hasFooterSlot && 'Tooltip__footer'">
+      <div v-if="hasFooterSlot" class="Tooltip__footer">
         <slot name="footer" :close="close" />
       </div>
     </div>
@@ -47,16 +49,16 @@ export default {
       type: Number,
       default: -1,
     },
-    maxwidth: {
-      type: Number,
-      default: 300, //pixels
+    size: {
+      type: String,
+      default: "", //small, medium, large
     },
   },
   data() {
     return {
       active: false,
       timeout: null,
-      position: "top", //top, bottom, left. right, topleft, topright, bottomleft, bottomright
+      position: "top", //top, bottom, left, right, topleft, topright, bottomleft, bottomright
       ready: false,
     };
   },
@@ -89,11 +91,10 @@ export default {
       var windowHeight = window.innerHeight;
 
       //Edge case
-      var res = this.isAtEdge(rect, rectTooltip, windowWidth, windowHeight);
-      if (res) return res;
+      var pos = this.isAtEdge(rect, rectTooltip, windowWidth, windowHeight);
+      if (pos) return pos;
 
       //Normal case
-      var pos = "";
       if (this.positioning == "vertical") {
         this.isTopWindow(rect, windowHeight) ? (pos = "bottom") : (pos = "top");
       } else {
@@ -230,6 +231,16 @@ export default {
     font-family: var(--font);
     color: var(--text-color);
     padding: 0px 10px 10px 10px;
+  }
+
+  &.Tooltip--small .Tooltip__content {
+    max-width: 200px;
+  }
+  &.Tooltip--medium .Tooltip__content {
+    max-width: 300px;
+  }
+  &.Tooltip--large .Tooltip__content {
+    max-width: 400px;
   }
 
   //Top

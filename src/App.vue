@@ -20,11 +20,11 @@ import Dashboard from "./scenes/Dashboard";
   <TooltipExtended
     v-for="(item, index) in items"
     class="Button"
-    :key="index"
+     :key="index"
     title="What inspires you?"
     :positioning="item"
-    :timer="-1"
-    :maxwidth="250"
+    :timer="5000"
+    size="medium"
     ><template #image>
       <i class="fas fa-ambulance" style="font-size: 40px;"></i>
     </template>

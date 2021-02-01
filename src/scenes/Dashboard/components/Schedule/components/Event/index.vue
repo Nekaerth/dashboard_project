@@ -1,5 +1,6 @@
 <template>
   <div class="Event">
+    <div class="Event__line"></div>
     <div class="Event__content">
       <div class="Event__title">{{ title }}</div>
       <div class="Event__description">{{ description }}</div>
