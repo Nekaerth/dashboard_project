@@ -1,13 +1,9 @@
 <template>
   <div>
-    <div v-if="!action" :class="['Tile', action && 'Tile--clickable']">
-      <div class="Tile__content">
-        <i :class="'Tile__icon ' + icon"></i>
-        <div class="Tile__amount">{{ amount }}</div>
-        <div class="Tile__title">{{ title }}</div>
-      </div>
-    </div>
-    <div v-else :class="['Tile', action && 'Tile--clickable']" @click="action">
+    <div
+      :class="['Tile', action && 'Tile--clickable']"
+      @click="action && action()"
+    >
       <div class="Tile__content">
         <i :class="'Tile__icon ' + icon"></i>
         <div class="Tile__amount">{{ amount }}</div>
@@ -39,7 +35,7 @@ export default {
     },
     action: {
       type: Function,
-      default: null,
+      default: undefined,
     },
   },
 };
@@ -55,16 +51,31 @@ export default {
   border-radius: 6px;
   border: 1px solid #e7e7e7;
 
+  .Tile__content {
+    text-align: center;
+    padding: 30px;
+    font-family: "Roboto", sans-serif;
+  }
+
+  .Tile__icon {
+    font-size: 16px;
+  }
+
+  .Tile__amount {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .Tile__title {
+    font-size: 12px;
+  }
+
   &.Tile--clickable:hover {
     cursor: pointer;
+    background-color: rgb(224, 230, 233);
     .Tile__title {
       text-decoration: underline;
     }
   }
-}
-
-.Tile__content {
-  text-align: center;
-  padding: 2em;
 }
 </style>

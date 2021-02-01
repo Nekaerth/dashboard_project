@@ -1,11 +1,14 @@
 <template>
-  <div class="Event">
+  <div
+    :class="['Event', action && 'Event--clickable']"
+    @click="action && action()"
+  >
     <div class="Event__line"></div>
     <div class="Event__content">
       <div class="Event__title">{{ title }}</div>
       <div class="Event__description">{{ description }}</div>
     </div>
-    <div class="Event__date">{{ date }}</div>
+    <div class="Event__date">{{ getTime }}</div>
   </div>
 </template>
 
@@ -22,12 +25,27 @@ export default {
       default: "",
     },
     date: {
-      type: String,
+      type: Date,
       required: true,
     },
     action: {
       type: Function,
-      default: null,
+      default: undefined,
+    },
+  },
+  computed: {
+    getTime() {
+      return (
+        this.date
+          .getHours()
+          .toString()
+          .padStart(2, "0") +
+        ":" +
+        this.date
+          .getMinutes()
+          .toString()
+          .padStart(2, "0")
+      );
     },
   },
 };
@@ -36,34 +54,48 @@ export default {
 <style lang="scss" scoped>
 .Event {
   display: flex;
+  justify-content: space-between;
   font-family: "Roboto", sans-serif;
-  background-color: red;
-  max-width: 300px;
+
+  --color: purple;
+  --title-color: black;
+  --title-size: 14px;
+  --text-color: gray;
+  --text-size: 12px;
+
+  &.Event--clickable:hover {
+    cursor: pointer;
+    .Event__title {
+      text-decoration: underline;
+    }
+  }
 
   .Event__line {
-    background-color: purple;
-    width: 3px;
+    background-color: var(--color);
+    width: 4px;
+    margin-right: 10px;
   }
 
   .Event__content {
-    background-color: cyan;
-    margin: 5px, 0px, 10px, 5px;
+    width: stretch;
   }
 
   .Event__title {
-    font-size: 14px;
-    color: black;
+    font-size: var(--title-size);
+    color: var(--title-color);
     font-weight: bold;
   }
 
   .Event__description {
-    font-size: 12px;
-    color: gray;
+    font-size: var(--text-size);
+    color: var(--text-color);
   }
 
   .Event__date {
-    font-size: 12px;
-    color: gray;
+    font-size: var(--text-size);
+    color: var(--text-color);
+    min-width: max-content;
+    margin: auto;
   }
 }
 </style>
