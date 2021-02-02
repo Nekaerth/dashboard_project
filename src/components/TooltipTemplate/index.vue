@@ -1,46 +1,25 @@
 <template>
   <div
-    :class="[
-      'Tooltip',
-      'Tooltip--' + position,
-      size ? 'Tooltip--' + size : undefined,
-    ]"
+    :class="['Tooltip', 'Tooltip--' + position, 'Tooltip--' + size]"
     ref="element"
+    :style="'--color: ' + color"
   >
-    <div v-if="active" class="Tooltip__arrow" />
-    <div v-if="active" class="Tooltip__content" ref="tooltip">
-      <Close @click="close" size="small" class="Tooltip__button" />
-      <div class="Tooltip__topcontent">
-        <div v-if="hasImageSlot" class="Tooltip__image">
-          <slot name="image" />
-        </div>
-        <div class="Tooltip__rightcontent">
-          <span class="Tooltip__title">{{ title }}</span>
-          <div class="Tooltip__body">
-            <slot name="content" />
-          </div>
+    <transition>
+      <div v-if="active">
+        <div class="Tooltip__arrow" />
+        <div class="Tooltip__content" ref="tooltip">
+          <slot name="content" :close="close" />
         </div>
       </div>
-      <div v-if="hasFooterSlot" class="Tooltip__footer">
-        <slot name="footer" :close="close" />
-      </div>
-    </div>
-    <slot name="default" :show="show" />
+    </transition>
+    <slot name="default" :show="show" :close="close" />
   </div>
 </template>
 
 <script>
-import Close from "../Close";
 export default {
-  name: "TooltipExtended",
-  components: {
-    Close,
-  },
+  name: "TooltipTemplate",
   props: {
-    title: {
-      type: String,
-      default: "",
-    },
     positioning: {
       type: String,
       default: "vertical", //vertical, horizontal
@@ -51,7 +30,11 @@ export default {
     },
     size: {
       type: String,
-      default: "", //small, medium, large
+      default: "small", //small, medium, large
+    },
+    color: {
+      type: String,
+      default: "gray",
     },
   },
   data() {
@@ -59,16 +42,7 @@ export default {
       active: false,
       timeout: null,
       position: "top", //top, bottom, left, right, topleft, topright, bottomleft, bottomright
-      ready: false,
     };
-  },
-  computed: {
-    hasImageSlot() {
-      return !!this.$slots.image;
-    },
-    hasFooterSlot() {
-      return !!this.$slots.footer;
-    },
   },
   methods: {
     show() {
@@ -169,16 +143,22 @@ export default {
   position: relative;
   display: inline-block;
 
-  --color: white;
-  --text-color: rgb(16, 24, 45);
   --font: "Roboto", sans-serif;
   --arrow-size: 7px;
   --translate-backward: calc(-100% - var(--arrow-size) + 1px);
   --translate-forward: calc(100% + var(--arrow-size) - 1px);
 
+  .v-enter-active,
+  .v-leave-active {
+    transition: opacity 0.4s;
+  }
+  .v-enter,
+  .v-leave-to {
+    opacity: 0;
+  }
+
   .Tooltip__content {
     width: max-content;
-    min-height: 50px;
     background-color: var(--color);
     box-shadow: 0 0px 20px rgba(0, 0, 0, 0.2);
     border-radius: 3px;
@@ -193,51 +173,11 @@ export default {
     z-index: 2;
   }
 
-  .Tooltip__button {
-    position: absolute;
-    top: 0%;
-    right: 0%;
-  }
-
-  .Tooltip__topcontent {
-    display: flex;
-    margin: 10px;
-  }
-
-  .Tooltip__image {
-    margin: auto;
-    padding-right: 10px;
-  }
-
-  .Tooltip__rightcontent {
-    font-family: var(--font);
-    color: var(--text-color);
-  }
-
-  .Tooltip__title {
-    display: inline-block;
-    font-size: 14px;
-    font-weight: bold;
-    padding-bottom: 10px;
-  }
-
-  .Tooltip__body {
-    font-size: 12px;
-  }
-
-  .Tooltip__footer {
-    display: flex;
-    justify-content: space-between;
-    font-family: var(--font);
-    color: var(--text-color);
-    padding: 0px 10px 10px 10px;
-  }
-
   &.Tooltip--small .Tooltip__content {
-    max-width: 200px;
+    max-width: 160px;
   }
   &.Tooltip--medium .Tooltip__content {
-    max-width: 300px;
+    max-width: 280px;
   }
   &.Tooltip--large .Tooltip__content {
     max-width: 400px;
@@ -253,7 +193,8 @@ export default {
     .Tooltip__arrow {
       border-top-color: var(--color);
       top: 0%;
-      transform: translateY(-50%);
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
     }
   }
   //Bottom
@@ -266,7 +207,8 @@ export default {
     .Tooltip__arrow {
       border-bottom-color: var(--color);
       bottom: 0%;
-      transform: translateY(50%);
+      left: 50%;
+      transform: translateY(50%) translateX(-50%);
     }
   }
   //Right
@@ -278,8 +220,9 @@ export default {
     }
     .Tooltip__arrow {
       border-right-color: var(--color);
+      top: 50%;
       right: 0%;
-      transform: translateX(50%);
+      transform: translateY(-50%) translateX(50%);
     }
   }
   //Left
@@ -291,8 +234,9 @@ export default {
     }
     .Tooltip__arrow {
       border-left-color: var(--color);
+      top: 50%;
       left: 0%;
-      transform: translateX(-50%);
+      transform: translateY(-50%) translateX(-50%);
     }
   }
 
@@ -305,8 +249,9 @@ export default {
     }
     .Tooltip__arrow {
       border-left-color: var(--color);
+      top: 50%;
       left: 0%;
-      transform: translateX(-50%);
+      transform: translateY(-50%) translateX(-50%);
     }
   }
   &.Tooltip--topleft2 {
@@ -318,7 +263,8 @@ export default {
     .Tooltip__arrow {
       border-top-color: var(--color);
       top: 0%;
-      transform: translateY(-50%);
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
     }
   }
 
@@ -331,8 +277,9 @@ export default {
     }
     .Tooltip__arrow {
       border-right-color: var(--color);
+      top: 50%;
       right: 0%;
-      transform: translateX(50%);
+      transform: translateY(-50%) translateX(50%);
     }
   }
   &.Tooltip--topright2 {
@@ -344,7 +291,8 @@ export default {
     .Tooltip__arrow {
       border-top-color: var(--color);
       top: 0%;
-      transform: translateY(-50%);
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
     }
   }
 
@@ -357,8 +305,9 @@ export default {
     }
     .Tooltip__arrow {
       border-left-color: var(--color);
+      top: 50%;
       left: 0%;
-      transform: translateX(-50%);
+      transform: translateY(-50%) translateX(-50%);
     }
   }
   &.Tooltip--bottomleft2 {
@@ -370,7 +319,8 @@ export default {
     .Tooltip__arrow {
       border-bottom-color: var(--color);
       bottom: 0%;
-      transform: translateY(50%);
+      left: 50%;
+      transform: translateY(50%) translateX(-50%);
     }
   }
 
@@ -383,8 +333,9 @@ export default {
     }
     .Tooltip__arrow {
       border-right-color: var(--color);
+      top: 50%;
       right: 0%;
-      transform: translateX(50%);
+      transform: translateY(-50%) translateX(50%);
     }
   }
   &.Tooltip--bottomright2 {
@@ -396,7 +347,8 @@ export default {
     .Tooltip__arrow {
       border-bottom-color: var(--color);
       bottom: 0%;
-      transform: translateY(50%);
+      left: 50%;
+      transform: translateY(50%) translateX(-50%);
     }
   }
 }
