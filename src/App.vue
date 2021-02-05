@@ -1,42 +1,14 @@
 <template>
   <div id="app">
-    <div class="Buttons">
-      <TooltipExtended
-        v-for="(item, index) in items"
-        class="Button"
-        :key="index"
-        title="What inspires you?"
-        :positioning="item"
-        :timer="-1"
-        size="medium"
-        ><template #image>
-          <i class="fas fa-ambulance" style="font-size: 40px;"></i>
-        </template>
-        ><template #content>
-          <span>
-            Tell us your interests and we'll pick the best articles just for
-            you.
-          </span>
-        </template>
-        ><template #footer>
-          <button
-            style="background-color: rgb(12, 82, 156); color: white; border-width: 0px;"
-          >
-            Learn more
-          </button>
-        </template>
-        <template #default="{ show }">
-          <button @click="show">{{ item }}</button>
-        </template>
-      </TooltipExtended>
-    </div>
+    <FileUpload />
   </div>
 </template>
 
 <script>
+import FileUpload from "./components/FileUpload";
 //import Dashboard from "./scenes/Dashboard";
 //import Tooltip from "./components/TooltipTemplate/components/Tooltip";
-import TooltipExtended from "./components/TooltipTemplate/components/TooltipExtended";
+//import TooltipExtended from "./components/TooltipTemplate/components/TooltipExtended";
 
 /*
 <div class="Buttons">
@@ -86,7 +58,7 @@ import TooltipExtended from "./components/TooltipTemplate/components/TooltipExte
 export default {
   name: "App",
   components: {
-    TooltipExtended,
+    FileUpload,
   },
   data() {
     return {

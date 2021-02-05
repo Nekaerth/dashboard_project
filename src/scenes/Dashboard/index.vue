@@ -28,7 +28,7 @@ export default {
         {
           title: "Favoritter",
           amount: 11,
-          icon: "fal fa-heart",
+          icon: "fas fa-heart",
           action: this.someAction,
         },
         {
